@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        body {
+            padding: 10px;
+            background-color: #eee;
+        }
+        
+        nav {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        nav h1 {
+            display: inline-block;
+            text-align: center;
+            color: #fff;
+            background-color: red;
+            border-radius: 7px;
+            padding: 0;
+            margin: 0;
+        }
+        
+        nav span {
+            font-size: 1.5rem;
+            font-weight: 400;
+        }
+        
+        #showVideo {
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            grid-gap: 20px;
+        }
+        
+        #showVideo div {
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+        
+        #showVideo div iframe {
+            width: 100%;
+            display: inline-block;
+            border-radius: 10px;
+        }
+        
+        #showVideo div h3 {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        }
+        
+        #showVideo div p {
+            margin: 0;
+            font-weight: 600;
+            color: rgb(73, 56, 56);
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <h1>Youtube</h1>
+        <span>Popular</span>
+        <hr />
+    </nav>
+    <main>
+        <div id="showVideo"></div>
+    </main>
+</body>
+
+</html>
+<script>
+    let showVideo = document.getElementById("showVideo");
+    async function getData() {
+        let response = await fetch(
+            `https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&regionCode=IN&key=AIzaSyAGz_9IcbYbb1EpU3HcPi2MYaQjvvJ86pA&part=snippet&maxResults=20`
+        );
+        let {
+            items
+        } = await response.json();
+        console.log(items);
+        for (let ele of items) {
+            console.log(ele);
+            let div = document.createElement("div");
+            div.innerHTML = `
+      <iframe width="300" height="200" src="https://www.youtube.com/embed/${ele.id}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <h3>${ele.snippet.title}</h3>
+      <p>${ele.snippet.channelTitle}</p>
+      <p>${ele.snippet.publishedAt}</p>
+      `;
+            showVideo.appendChild(div);
+        }
+    }
+    getData();
+</script>
