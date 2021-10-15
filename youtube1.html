@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube</title>
+    <!-- <img src="https://img.icons8.com/color/48/000000/youtube-play.png"/> -->
+    <link rel="icon" href="https://img.icons8.com/color/144/000000/youtube-play.png" type="image/icon type">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* div{
+    border: 1px solid red;
+} */
+        /* Navbar */
+        
+        nav {
+            width: 100%;
+            height: 60px;
+            padding: 0 3% 0 2%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            background-color: white;
+        }
+        
+        #navLeftPart {
+            display: flex;
+            width: 13%;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        #navMiddlePart {
+            width: 55%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        
+        #navMiddlePart button {
+            width: 10%;
+        }
+        
+        #navRightPart {
+            width: 17%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        #searchedResult {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            border: 2px solid rgb(218, 218, 218);
+            overflow: scroll;
+            position: absolute;
+            top: 50px;
+            background-color: white;
+            padding: 12px 15px;
+            /* left: -1000; */
+            height: 500px;
+        }
+        
+        .searchedResultP {
+            cursor: pointer;
+        }
+        
+        #searchedResult::-webkit-scrollbar {
+            display: none;
+        }
+        /* --------------------------------------------------- */
+        /* body container */
+        
+        #bodyBox {
+            margin-top: 60px;
+            display: flex;
+        }
+        
+        #sideBar {
+            min-width: 75px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 0;
+            position: fixed;
+            left: 0;
+        }
+        
+        #sideBar span {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 60px;
+            cursor: pointer;
+        }
+        
+        #sideBar span:hover {
+            background-color: rgb(214, 214, 214);
+        }
+        
+        #videosBox {
+            display: flex;
+            flex-direction: column;
+            width: 94%;
+            margin-left: 6%;
+        }
+        
+        #sugestions {
+            display: flex;
+            width: 100%;
+            justify-content: space-around;
+            align-items: center;
+            border-bottom: 1px solid rgb(219, 219, 219);
+            border-top: 1px solid rgb(219, 219, 219);
+            height: 60px;
+            position: fixed;
+            top: 60px;
+            background-color: white;
+        }
+        
+        .sugBoxes {
+            border: 1px solid rgb(190, 190, 190);
+            padding: 5px 10px;
+            text-align: center;
+            border-radius: 10px;
+            background-color: rgb(243, 243, 243);
+            cursor: pointer;
+        }
+        
+        .sugBoxes:hover {
+            background-color: rgb(219, 219, 219);
+        }
+        
+        #mainContainer {
+            display: grid;
+            /* display: flex; */
+            width: 100%;
+            grid-template-columns: repeat(4, 23%);
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            margin-top: 60px;
+            padding: 20px 0;
+            background-color: rgb(241, 241, 241);
+        }
+        
+        #mainContainerSecoundry {
+            /* display: grid; */
+            display: flex;
+            width: 100%;
+            /* grid-template-columns: repeat(4, 23%); */
+            /* justify-content: space-evenly; */
+            flex-wrap: wrap;
+            margin-top: 60px;
+            padding: 20px;
+            background-color: rgb(241, 241, 241);
+        }
+        
+        #mainContainer p {
+            font-weight: 500;
+            font-size: 15px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        /* ---------------------------------------- */
+        
+        .titleWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        /* ----------------------------------------- */
+        /* iframe{
+    border: 1px solid red;
+} */
+        
+        .videoAPIBox {
+            display: flex;
+            flex-direction: column;
+            /* gap: 5%; */
+            width: 100%;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        
+        .videoAPIBoxSecoundry {
+            display: flex;
+            /* flex-direction: column; */
+            gap: 2%;
+            width: 100%;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        
+        .video_titleDiv {
+            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            line-height: 21px;
+            max-height: 42px;
+            -webkit-line-clamp: 3;
+            /* number of lines to show */
+            -webkit-box-orient: vertical;
+        }
+        
+        .channel_titleDiv {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            color: rgb(105, 105, 105);
+            gap: 8px;
+        }
+        /* ----------------------------------------------------------- */
+        
+        @media (max-width: 540px) {
+            #mainContainer {
+                grid-template-columns: repeat(1, 80%);
+                justify-content: space-evenly;
+            }
+            #sugestions {
+                overflow-x: scroll;
+            }
+            #sugestions::-webkit-scrollbar {
+                display: none;
+            }
+            #videosBox {
+                /* max-width: 70%; */
+                margin-left: 16%;
+            }
+            #navMiddlePart input {
+                display: none;
+            }
+            #navMiddlePart {
+                width: 18%;
+                align-items: flex-end;
+            }
+            #navMiddlePart button {
+                width: 70%;
+            }
+            #navLeftPart {
+                width: 30%;
+            }
+            #navRightPart {
+                width: 35%;
+            }
+        }
+        
+        @media (min-width: 541px) and (max-width: 860px) {
+            #mainContainer {
+                grid-template-columns: repeat(2, 45%);
+                justify-content: space-evenly;
+            }
+            #sugestions {
+                overflow-x: scroll;
+            }
+            #sugestions::-webkit-scrollbar {
+                display: none;
+            }
+            #videosBox {
+                max-width: 90%;
+                margin-left: 12%;
+            }
+            #navMiddlePart input {
+                display: none;
+            }
+            #navMiddlePart {
+                width: 18%;
+                align-items: flex-end;
+            }
+            #navMiddlePart button {
+                width: 70%;
+            }
+            #navLeftPart {
+                width: 30%;
+            }
+            #navRightPart {
+                width: 35%;
+            }
+        }
+        
+        @media (min-width: 861px) and (max-width: 1100px) {
+            #mainContainer {
+                grid-template-columns: repeat(3, 30%);
+                justify-content: space-evenly;
+            }
+            #sugestions {
+                overflow-x: scroll;
+            }
+            #sugestions::-webkit-scrollbar {
+                display: none;
+            }
+            #videosBox {
+                margin-left: 8%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!--Top Navbar -->
+    <nav>
+        <!-- <div id="topLayout"> -->
+        <!-- navbar left part -->
+        <div id="navLeftPart">
+            <img style="cursor: pointer;" src="https://img.icons8.com/material-outlined/24/000000/menu--v3.png" />
+            <span style="display: flex; align-items: center; justify-content: center; gap: 3px; cursor: pointer">
+                    <img style="width: 90px;" src="https://logos-world.net/wp-content/uploads/2020/04/YouTube-Logo.png">
+                    <p style="margin-bottom: 25px; font-size: small;">IN</p>
+                </span>
+        </div>
+        <!-- navbar middle part -->
+        <div id="navMiddlePart">
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <input style="width: 85%; height: 38px; padding: 10px; border-radius: 2px 0 0 2px; border: 1px solid rgb(194, 194, 194);" oninput="debounce(this.value, 1000)" id="searchKeyword" type="text" placeholder="Search">
+                <button style="height: 38px; border-radius: 0 2px2px 0px; border: 1px solid rgb(194, 194, 194); cursor: pointer" onclick="showSearchedResultVideo()"><img src="https://img.icons8.com/ios/25/000000/search--v1.png"/></button>
+                <span style="margin-left: 2%; width: 40px; height: 40px; background-color: rgb(247, 247, 247); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer">
+                        <img src="https://img.icons8.com/material-sharp/25/000000/microphone--v1.png"/>
+                    </span>
+            </div>
+            <div id="searchedResult">
+
+            </div>
+        </div>
+        <!-- navbar right part -->
+        <div id="navRightPart">
+            <span style="border-radius: 50%; background-color: rgb(247, 247, 247); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer">
+                    <img src="https://img.icons8.com/ios/25/000000/video-call.png"/>
+                </span>
+            <img style="cursor: pointer" src="https://img.icons8.com/ios/25/000000/moleskine-icon.png" />
+            <img style="cursor: pointer" src="https://img.icons8.com/ios/25/000000/appointment-reminders--v1.png" />
+            <img style="width: 25px; cursor: pointer;" src="https://scontent-msp1-1.xx.fbcdn.net/v/t1.6435-9/145083650_3341965545915076_9108652492179975716_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=174925&_nc_ohc=VGbLOJDLoBAAX81ruMC&_nc_ht=scontent-msp1-1.xx&oh=1ad682d6e825c75c7604d3b2494f9792&oe=618DBC3A"
+                alt="">
+        </div>
+        <!-- </div> -->
+    </nav>
+    <div id="bodyBox">
+        <div id="sideBar">
+            <span>
+                <img style="width: 25px;" src="https://img.icons8.com/material-rounded/24/000000/home.png"/>
+                <p style="font-size: 12px;">Home</p>
+            </span>
+            <span>
+                <img style="width: 25px;" src="https://img.icons8.com/ios/50/000000/compass--v1.png"/>
+                <p style="font-size: 12px;">Explore</p>
+            </span>
+            <span>
+                <img style="width: 25px;" src="https://img.icons8.com/ios/50/000000/video-playlist.png"/>
+                <p style="font-size: 12px;">Subscriptions</p>
+            </span>
+            <span>
+                <img style="width: 25px;" src="https://img.icons8.com/material-outlined/50/000000/video-gallery.png"/>
+                <p style="font-size: 12px;">Library</p>
+            </span>
+        </div>
+        <div id="videosBox">
+            <div id="sugestions">
+                <div class="sugBoxes">
+                    <p>All</p>
+                </div>
+                <div class="sugBoxes">
+                    <p>Music</p>
+                </div>
+                <div class="sugBoxes">
+                    <p>Mixes</p>
+                </div>
+                <div class="sugBoxes">
+                    <p>JavaScript</p>
+                </div>
+                <div class="sugBoxes">
+                    <p>Computer Programming</p>
+                </div>
+                <div class="sugBoxes">
+                    <p>Trending</p>
+                </div>
+                <div class="sugBoxes">
+                    <p>Data Stracture & Algo</p>
+                </div>
+                <div class="sugBoxes">
+                    <p>Full Stack Development</p>
+                </div>
+                <img src="https://img.icons8.com/ios-glyphs/15/000000/chevron-right.png" />
+            </div>
+            <div id="mainContainer">
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    let searchedResult = document.getElementById("searchedResult");
+    let mainContainer = document.getElementById("mainContainer");
+
+    var globalData;
+
+    // API: AIzaSyA2eQDFN-PFovXa9BWhv9BorJ_DL9fPKbI, AIzaSyBYo-W0gRSFplhy2WC1x8s2wLFszATD7jg, AIzaSyDppDIBLwWIeHL6RICPfthgiBrxo5AQMKE
+
+    async function ytAPICall() {
+        let query = document.getElementById("searchKeyword").value;
+        // https://api.themoviedb.org/3/search/movie?&api_key=1229e943aec051105219f4ea7a80c817${"&query="}${query}
+
+        // https://youtube.googleapis.com/youtube/v3/search?q=${query}&type=video&key=AIzaSyA2eQDFN-PFovXa9BWhv9BorJ_DL9fPKbI&maxResults=20
+
+        let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${query}&type=video&key=AIzaSyDppDIBLwWIeHL6RICPfthgiBrxo5AQMKE&maxResults=20&safeSearch=strict&videoCaption=closedCaption&part=snippet&chart=mostPopular&regionCode=IN`);
+
+        let dataFetched = await res.json();
+        globalData = dataFetched.items
+        console.log("fdata: ", dataFetched.items);
+        return (dataFetched.items);
+        // appendSearchedResult(data.items);
+    }
+
+    let timerId;
+
+    function debounce(keyword, delay) {
+        // console.log(keyword, delay);
+
+        if (timerId) {
+            clearTimeout(timerId);
+        }
+
+        if (keyword.length === 0) {
+            searchedResult.style.display = "none";
+            return false;
+        }
+
+        timerId = setTimeout(function() {
+            appendSearchedResult(keyword);
+        }, delay)
+    }
+
+    async function appendSearchedResult(keyword) {
+
+        searchedResult.style.display = "flex";
+        searchedResult.innerHTML = null;
+
+        let res = await ytAPICall(keyword);
+        // showVideoInBody(res);
+        // console.log(res)
+
+        res.forEach(({
+            snippet: {
+                title
+            },
+            videoElement
+        }) => {
+            let div = document.createElement("div");
+            div.setAttribute("class", "searchedResultP");
+            div.onclick = () => {
+                showSearchedResultVideo();
+            }
+
+            let title_name = document.createElement("p");
+            // title_name.setAttribute("class", "searchedResultP");
+            title_name = title;
+
+            div.append(title_name);
+
+            searchedResult.append(div);
+        });
+    }
+
+    function showSearchedResultVideo() {
+        // searchedResult.innerHTML = null;
+        searchedResult.style.display = "none";
+
+        mainContainer.innerHTML = null;
+
+        mainContainer.setAttribute("id", "mainContainerSecoundry");
+
+        globalData.forEach(({
+            id: {
+                videoId
+            },
+            snippet: {
+                title
+            },
+            snippet: {
+                channelTitle
+            }
+        }) => {
+            let div = document.createElement("div");
+            div.setAttribute("class", "videoAPIBoxSecoundry");
+            // console.log(id, snippet);
+
+            let vidDiv = document.createElement("div");
+            vidDiv.innerHTML = `<iframe src=https://www.youtube.com/embed/${videoId} title="YouTube video" frameBorder="0" width="380" height="220" allow="fullscreen"></iframe>`;
+
+            let titleWrapper = document.createElement("div");
+            titleWrapper.setAttribute("class", "titleWrapper");
+
+            let video_titleDiv = document.createElement("div");
+            video_titleDiv.setAttribute("class", "video_titleDiv");
+            let video_title = document.createElement("p");
+            video_title.innerText = title;
+            video_titleDiv.append(video_title);
+
+            let channel_titleDiv = document.createElement("div");
+            channel_titleDiv.setAttribute("class", "channel_titleDiv");
+            let channel_title = document.createElement("p");
+            channel_title.innerText = channelTitle;
+
+            let img = document.createElement("img");
+            img.src = "https://img.icons8.com/ios-glyphs/20/000000/checked--v1.png";
+            channel_titleDiv.append(channel_title, img);
+
+            titleWrapper.append(video_titleDiv, channel_titleDiv);
+
+            div.append(vidDiv, titleWrapper);
+            mainContainer.append(div);
+        });
+    }
+
+    async function mostPopularVideo() {
+        // 
+        let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?type=video&key=AIzaSyDppDIBLwWIeHL6RICPfthgiBrxo5AQMKE&maxResults=20&safeSearch=strict&videoCaption=closedCaption&part=snippet&chart=mostPopular&regionCode=IN`);
+
+        let data = await res.json();
+        showVideoInBody(data.items);
+    }
+
+    function showVideoInBody(data) {
+
+        mainContainer.innerHTML = null;
+
+        console.log("Data: ", data)
+
+        data.forEach(({
+            id: {
+                videoId
+            },
+            snippet: {
+                title
+            },
+            snippet: {
+                channelTitle
+            }
+        }) => {
+            let div = document.createElement("div");
+            div.setAttribute("class", "videoAPIBox")
+                // console.log(id, snippet);
+
+            let vidDiv = document.createElement("div");
+            vidDiv.innerHTML = `<iframe src=https://www.youtube.com/embed/${videoId} title="YouTube video" frameBorder="0" width="280" height="200" allow="fullscreen"></iframe>`;
+
+            let video_titleDiv = document.createElement("div");
+            video_titleDiv.setAttribute("class", "video_titleDiv");
+            let video_title = document.createElement("p");
+            video_title.innerText = title;
+            video_titleDiv.append(video_title);
+
+            let channel_titleDiv = document.createElement("div");
+            channel_titleDiv.setAttribute("class", "channel_titleDiv");
+            let channel_title = document.createElement("p");
+            channel_title.innerText = channelTitle;
+
+            let img = document.createElement("img");
+            img.src = "https://img.icons8.com/ios-glyphs/20/000000/checked--v1.png";
+            channel_titleDiv.append(channel_title, img);
+
+            div.append(vidDiv, video_titleDiv, channel_titleDiv);
+            mainContainer.append(div);
+        })
+    }
+
+    mostPopularVideo();
+</script>
